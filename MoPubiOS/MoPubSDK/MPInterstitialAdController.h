@@ -43,7 +43,10 @@ typedef NSUInteger InterstitialOrientationType;
 	MPInterstitialAdView *_adView;
 	
 	// Reference to the view controller that is presenting this interstitial.
-	UIViewController<MPInterstitialAdControllerDelegate> *_parent;
+	UIViewController *_parent;
+
+    // Reference to the object that wants to receive notifications about ad events.
+    NSObject<MPInterstitialAdControllerDelegate> *_delegate;
 	
 	// The ad unit ID.
 	NSString *_adUnitId;
@@ -67,7 +70,8 @@ typedef NSUInteger InterstitialOrientationType;
 }
 
 @property (nonatomic, readonly, assign) BOOL ready;
-@property (nonatomic, assign) UIViewController<MPInterstitialAdControllerDelegate> *parent;
+@property (nonatomic, assign) UIViewController *parent;
+@property (nonatomic, assign) NSObject<MPInterstitialAdControllerDelegate> *delegate;
 @property (nonatomic, copy) NSString *adUnitId;
 @property (nonatomic, copy) NSString *keywords;
 @property (nonatomic, copy) CLLocation *location;

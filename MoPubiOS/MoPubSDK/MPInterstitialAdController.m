@@ -41,6 +41,7 @@ static NSString * const kOrientationBoth				= @"b";
 
 @synthesize ready = _ready;
 @synthesize parent = _parent;
+@synthesize delegate = _delegate;
 @synthesize adUnitId = _adUnitId;
 @synthesize closeButtonStyle = _closeButtonStyle;
 @synthesize adWantsNativeCloseButton = _adWantsNativeCloseButton;
@@ -139,6 +140,7 @@ static NSString * const kOrientationBoth				= @"b";
 - (void)dealloc 
 {
 	_parent = nil;
+    _delegate = nil;
 	_adView.delegate = nil;
 	[_currentAdapter unregisterDelegate];
 	[_currentAdapter release];
@@ -291,7 +293,7 @@ static NSString * const kOrientationBoth				= @"b";
 	[self.navigationController setNavigationBarHidden:_navigationBarWasHidden animated:NO];
 	
 	[self interstitialWillDisappearForAdapter:nil];
-	[self.parent dismissInterstitial:self];
+	[self.delegate dismissInterstitial:self];
 }
 
 - (void)loadAd
@@ -361,28 +363,28 @@ static NSString * const kOrientationBoth				= @"b";
 {
 	_ready = YES;
 	
-	if ([self.parent respondsToSelector:@selector(interstitialDidLoadAd:)])
-		[self.parent interstitialDidLoadAd:self];
+	if ([self.delegate respondsToSelector:@selector(interstitialDidLoadAd:)])
+		[self.delegate interstitialDidLoadAd:self];
 }
 
 - (void)adViewDidFailToLoadAd:(MPAdView *)view
 {
 	_ready = NO;
 	
-	if ([self.parent respondsToSelector:@selector(interstitialDidFailToLoadAd:)])
-		[self.parent interstitialDidFailToLoadAd:self];
+	if ([self.delegate respondsToSelector:@selector(interstitialDidFailToLoadAd:)])
+		[self.delegate interstitialDidFailToLoadAd:self];
 }
 
 - (void)willPresentModalViewForAd:(MPAdView *)view
 {
-	if ([self.parent respondsToSelector:@selector(willPresentModalViewForAd:)])
-		[self.parent willPresentModalViewForAd:view];
+	if ([self.delegate respondsToSelector:@selector(willPresentModalViewForAd:)])
+		[self.delegate willPresentModalViewForAd:view];
 }
 
 - (void)didDismissModalViewForAd:(MPAdView *)view
 {
-	if ([self.parent respondsToSelector:@selector(didDismissModalViewForAd:)])
-		[self.parent didDismissModalViewForAd:view];
+	if ([self.delegate respondsToSelector:@selector(didDismissModalViewForAd:)])
+		[self.delegate didDismissModalViewForAd:view];
 }
 
 - (void)adView:(MPAdView *)view didReceiveResponseParams:(NSDictionary *)params
@@ -449,8 +451,8 @@ static NSString * const kOrientationBoth				= @"b";
 {	
 	_ready = YES;
 	_adView.adManager.isLoading = NO;
-	if ([self.parent respondsToSelector:@selector(interstitialDidLoadAd:)])
-		[self.parent interstitialDidLoadAd:self];
+	if ([self.delegate respondsToSelector:@selector(interstitialDidLoadAd:)])
+		[self.delegate interstitialDidLoadAd:self];
 }
 
 - (void)adapter:(MPBaseInterstitialAdapter *)adapter didFailToLoadAdWithError:(NSError *)error
@@ -487,26 +489,26 @@ static NSString * const kOrientationBoth				= @"b";
 - (void)interstitialWillAppearForAdapter:(MPBaseInterstitialAdapter *)adapter
 {
 	[_adView.adManager trackImpression];
-	if ([self.parent respondsToSelector:@selector(interstitialWillAppear:)])
-		[self.parent interstitialWillAppear:self];
+	if ([self.delegate respondsToSelector:@selector(interstitialWillAppear:)])
+		[self.delegate interstitialWillAppear:self];
 }
 
 - (void)interstitialDidAppearForAdapter:(MPBaseInterstitialAdapter *)adapter
 {
-	if ([self.parent respondsToSelector:@selector(interstitialDidAppear:)])
-		[self.parent interstitialDidAppear:self];
+	if ([self.delegate respondsToSelector:@selector(interstitialDidAppear:)])
+		[self.delegate interstitialDidAppear:self];
 }
 
 - (void)interstitialWillDisappearForAdapter:(MPBaseInterstitialAdapter *)adapter
 {
-	if ([self.parent respondsToSelector:@selector(interstitialWillDisappear:)])
-		[self.parent interstitialWillDisappear:self];
+	if ([self.delegate respondsToSelector:@selector(interstitialWillDisappear:)])
+		[self.delegate interstitialWillDisappear:self];
 }
 
 - (void)interstitialDidDisappearForAdapter:(MPBaseInterstitialAdapter *)adapter
 {
-	if ([self.parent respondsToSelector:@selector(interstitialDidDisappear:)])
-		[self.parent interstitialDidDisappear:self];
+	if ([self.delegate respondsToSelector:@selector(interstitialDidDisappear:)])
+		[self.delegate interstitialDidDisappear:self];
 }
 
 - (void)interstitialWasTappedForAdapter:(MPBaseInterstitialAdapter *)adapter
@@ -517,8 +519,8 @@ static NSString * const kOrientationBoth				= @"b";
 - (void)interstitialDidExpireForAdapter:(MPBaseInterstitialAdapter *)adapter
 {
     _ready = NO;
-    if ([self.parent respondsToSelector:@selector(interstitialDidExpire:)])
-        [self.parent interstitialDidExpire:self];
+    if ([self.delegate respondsToSelector:@selector(interstitialDidExpire:)])
+        [self.delegate interstitialDidExpire:self];
 }
 
 #pragma mark -
