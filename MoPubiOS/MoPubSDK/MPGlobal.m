@@ -9,7 +9,9 @@
 #import "MPGlobal.h"
 #import "MPConstants.h"
 #import <CommonCrypto/CommonDigest.h>
+#if MOPUB_USE_OPENUDID
 #import "OpenUDID.h"
+#endif
 
 NSString *MPReadUDIDFromDefaults();
 void MPWriteUDIDToDefaults(NSString *UDID);
