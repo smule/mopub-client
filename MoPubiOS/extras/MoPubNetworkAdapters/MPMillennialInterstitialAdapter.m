@@ -93,7 +93,15 @@
 
 - (void)showInterstitialFromViewController:(UIViewController *)controller
 {
-    if ([_mmInterstitialAdView checkForCachedAd]) [_mmInterstitialAdView displayCachedAd];
+    if ([_mmInterstitialAdView checkForCachedAd])
+    {
+        _mmInterstitialAdView.rootViewController = controller;
+        if (![_mmInterstitialAdView displayCachedAd])
+        {
+            MPLogError(@"interstitial failed to display");
+            [self adModalWasDismissed];
+        }
+    }
 }
 
 # pragma mark - 
@@ -114,6 +122,8 @@
 }
 
 - (void)adRequestFailed:(MMAdView *)adView {
+    MPLogWarn(@"Millennial ad request failed.");
+    [self adModalWasDismissed];
 }
 
 - (void)adRequestIsCaching:(MMAdView *)adView {
