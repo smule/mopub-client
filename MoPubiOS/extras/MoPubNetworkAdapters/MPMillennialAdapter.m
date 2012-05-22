@@ -58,6 +58,10 @@
 								 delegate:self
 								   loadAd:NO
 							   startTimer:NO];
+    
+    //NR: added to fix bug when MMSDK complains about Invalid rootViewController.
+    self.mmAdView.rootViewController = [self.delegate viewControllerForPresentingModalView];
+    
 	[self.mmAdView refreshAd];
 }
 
